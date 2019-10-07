@@ -115,6 +115,9 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
   # Facet
   plot <- plot + facet_wrap(facet_variable, scales = scales)
   
-  return(plot)
+  # Print plot in function
+  print(plot)
+  
+  return(invisible(plot))
   
 }

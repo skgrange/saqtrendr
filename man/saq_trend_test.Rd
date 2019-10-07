@@ -5,7 +5,8 @@
 \title{Function to conduct a robust trend test.}
 \usage{
 saq_trend_test(df, by = as.character(), window = 35,
-  na_preserve = TRUE, alpha = 0.05, auto_correlation = FALSE)
+  na_preserve = TRUE, alpha = 0.05, auto_correlation = FALSE,
+  progress = FALSE)
 }
 \arguments{
 \item{df}{Input data frame containing a time series.}
@@ -23,12 +24,16 @@ confidence intervals.}
 
 \item{auto_correlation}{Should auto correlation be considered in the 
 estimates?}
+
+\item{progress}{Should a progress bar be displayed for the trend test 
+calculations?}
 }
 \value{
 Named list.
 }
 \description{
-Function to conduct a robust trend test.
+\code{saq_trend_test} can conduct the trend tests in parallel if a 
+\strong{futures} backend has been registered.
 }
 \author{
 Stuart K. Grange

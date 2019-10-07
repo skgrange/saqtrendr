@@ -4,7 +4,7 @@
 \alias{decompose_with_stlplus}
 \title{Function to classically decompose a time series with \code{stlplus}.}
 \usage{
-decompose_with_stlplus(df, window = 35, na_preserve = FALSE)
+decompose_with_stlplus(df, window = 35, na_preserve = TRUE)
 }
 \arguments{
 \item{df}{Data frame containing time series observations.}

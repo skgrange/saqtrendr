@@ -1,5 +1,8 @@
 #' Function to conduct a robust trend test. 
 #' 
+#' \code{saq_trend_test} can conduct the trend tests in parallel if a 
+#' \strong{futures} backend has been registered. 
+#' 
 #' @param df Input data frame containing a time series. 
 #' 
 #' @param by Which variables should be used as grouping variables? 
@@ -16,6 +19,9 @@
 #' @param auto_correlation Should auto correlation be considered in the 
 #' estimates?
 #' 
+#' @param progress Should a progress bar be displayed for the trend test 
+#' calculations? 
+#' 
 #' @author Stuart K. Grange
 #' 
 #' @return Named list. 
@@ -23,7 +29,9 @@
 #' @export
 saq_trend_test <- function(df, by = as.character(), window = 35, 
                            na_preserve = TRUE, alpha = 0.05, 
-                           auto_correlation = FALSE) {
+                           auto_correlation = FALSE, progress = FALSE) {
+  
+  # Could also return the nested tibble? 
   
   # Do the transformations and calculations in a nested tibble
   df_nest <- df %>% 
@@ -46,7 +54,8 @@ saq_trend_test <- function(df, by = as.character(), window = 35,
           deseason = FALSE,
           alpha = alpha,
           auto_correlation = auto_correlation
-        )
+        ),
+        .progress = progress
       )
     )
   
@@ -54,13 +63,13 @@ saq_trend_test <- function(df, by = as.character(), window = 35,
   df_decomposed <- df_nest %>% 
     select(-observations,
            -trend_test) %>% 
-    tidyr::unnest()
+    tidyr::unnest(decomposed)
   
   # And the trend tests
   df_trend_tests <- df_nest %>% 
     select(-observations,
            -decomposed) %>% 
-    tidyr::unnest()
+    tidyr::unnest(trend_test)
   
   # Build list for return
   list_trends <- list(

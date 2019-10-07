@@ -9,7 +9,7 @@
 #' also be propagated into the the deseasonalised components? 
 #' 
 #' @export
-decompose_with_stlplus <- function(df, window = 35, na_preserve = FALSE) {
+decompose_with_stlplus <- function(df, window = 35, na_preserve = TRUE) {
   
   # Checks needed: dates, missing values, monthly resolution
   

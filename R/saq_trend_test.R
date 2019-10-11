@@ -40,7 +40,7 @@ saq_trend_test <- function(df, by = as.character(), window = 35,
     mutate(
       decomposed = furrr::future_map(
         observations, 
-        ~saqtrendr::decompose_with_stlplus(
+        ~decompose_with_stlplus(
           ., 
           window = window, 
           na_preserve = na_preserve

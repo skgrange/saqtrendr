@@ -31,6 +31,17 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
                            y_location = 1, facet_variable = NA, scales = "fixed",
                            colour = "#FCA50A") {
   
+  # If a list is passed
+  if (class(df) == "list" && 
+      missing(df_tests) && 
+      names(df) %in% c("decomposed", "trend_tests")) {
+    
+    # The order matters here 
+    df_tests <- df$trend_tests
+    df <- df$decomposed
+    
+  }
+  
   if (stringr::str_detect(scales, "free") && !is.na(facet_variable[1])) {
     
     # site_name_country
@@ -113,7 +124,9 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
   }
   
   # Facet
-  plot <- plot + facet_wrap(facet_variable, scales = scales)
+  if (!is.na(facet_variable)) {
+    plot <- plot + facet_wrap(facet_variable, scales = scales)
+  }
   
   # Print plot in function
   print(plot)

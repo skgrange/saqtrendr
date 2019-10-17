@@ -7,6 +7,9 @@
 #' 
 #' @param by Which variables should be used as grouping variables? 
 #' 
+#' @param decompose Should the time series be decomposed before the trend test? 
+#' If this is \code{FALSE}, names in your inputs will be changed. 
+#' 
 #' @param window Span (in lags) of the loess window for seasonal extraction. 
 #' This should be an odd number.
 #' 
@@ -27,49 +30,83 @@
 #' @return Named list. 
 #' 
 #' @export
-saq_trend_test <- function(df, by = as.character(), window = 35, 
+saq_trend_test <- function(df, by = as.character(), decompose = TRUE, window = 35, 
                            na_preserve = TRUE, alpha = 0.05, 
                            auto_correlation = FALSE, progress = FALSE) {
   
   # Could also return the nested tibble? 
   
+  # Check value
+  stopifnot("value" %in% names(df) && is.numeric(df$value))
+  
   # Do the transformations and calculations in a nested tibble
   df_nest <- df %>% 
     dplyr::group_by_at(by) %>% 
-    dplyr::group_nest(.key = "observations") %>% 
-    mutate(
-      decomposed = furrr::future_map(
-        observations, 
-        ~decompose_with_stlplus(
-          ., 
-          window = window, 
-          na_preserve = na_preserve
-        )
-      ),
-      trend_test = furrr::future_map(
-        decomposed,
-        ~smonitor::theil_sen_trend_test(
-          ., 
-          variable = "trend_and_remainder",
-          deseason = FALSE,
-          alpha = alpha,
-          auto_correlation = auto_correlation
-        ),
-        .progress = progress
-      )
-    )
+    dplyr::group_nest(.key = "observations") 
   
-  # Get pieces
-  df_decomposed <- df_nest %>% 
-    select(-observations,
-           -trend_test) %>% 
-    tidyr::unnest(decomposed)
+  if (decompose) {
+    
+    df_nest <- df_nest %>% 
+      mutate(
+        decomposed = furrr::future_map(
+          observations, 
+          ~decompose_with_stlplus(
+            ., 
+            window = window, 
+            na_preserve = na_preserve
+          )
+        ),
+        trend_test = furrr::future_map(
+          decomposed,
+          ~smonitor::theil_sen_trend_test(
+            ., 
+            variable = "trend_and_remainder",
+            deseason = FALSE,
+            alpha = alpha,
+            auto_correlation = auto_correlation
+          ),
+          .progress = progress
+        )
+      )
+    
+    # Get pieces
+    df_decomposed <- df_nest %>% 
+      select(-observations,
+             -trend_test) %>% 
+      tidyr::unnest(decomposed)
+    
+  } else {
+    
+    # Use observations, not decomposed list
+    df_nest <- df_nest %>% 
+      mutate(
+        trend_test = furrr::future_map(
+          observations,
+          ~smonitor::theil_sen_trend_test(
+            ., 
+            variable = "value",
+            deseason = FALSE,
+            alpha = alpha,
+            auto_correlation = auto_correlation
+          ),
+          .progress = progress
+        )
+      )
+    
+    # Get pieces, a bad name here
+    df_decomposed <- df_nest %>% 
+      select(-trend_test) %>% 
+      tidyr::unnest(observations) %>% 
+      rename(trend_and_remainder = value)
+    
+  }
   
   # And the trend tests
   df_trend_tests <- df_nest %>% 
-    select(-observations,
-           -decomposed) %>% 
-    tidyr::unnest(trend_test)
+    select(-dplyr::matches("observations|decomposed")) %>% 
+    tidyr::unnest(trend_test) %>% 
+    mutate(decomposed = !!decompose) %>% 
+    select(-deseason)
   
   # Build list for return
   list_trends <- list(

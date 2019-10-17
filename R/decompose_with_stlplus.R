@@ -11,7 +11,7 @@
 #' @export
 decompose_with_stlplus <- function(df, window = 35, na_preserve = TRUE) {
   
-  # Checks needed: dates, missing values, monthly resolution
+  # Checks needed: missing values, monthly resolution
   
   if (!"date" %in% names(df)) {
     stop("`date` must be present in data frame.", call. = FALSE)
@@ -19,6 +19,10 @@ decompose_with_stlplus <- function(df, window = 35, na_preserve = TRUE) {
   
   if (!lubridate::is.POSIXct(df$date)) {
     stop("`date` must be a parsed date (POSIXct).", call. = FALSE) 
+  }
+  
+  if (!"value" %in% names(df)) {
+    stop("Variable to be decomposed must be named `value`.", call. = FALSE)
   }
   
   if (nrow(df) <= 3) {

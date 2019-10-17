@@ -4,13 +4,14 @@
 #' 
 #' @param variable Variable in \code{df} to create a time series object with. 
 #' 
-#' @param period Period/interval to make time series. Currently, only month is
-#' supported. 
+#' @param period Period/interval to make time series. Currently, only 
+#' \code{"month"} and \code{"day"} are supported. 
 #' 
 #' @author Stuart K. Grange
 #' 
 #' @return A \code{ts} object.
 #' 
+#' @export
 data_frame_to_time_series <- function(df, variable = "value", period = "month") {
   
   # Get start date
@@ -18,6 +19,8 @@ data_frame_to_time_series <- function(df, variable = "value", period = "month") 
   
   if (period == "month") {
     frequency <- 12L
+  } else if (period == "day") {
+    frequency <- 365L
   } else {
     stop("`frequency` not supported.", call. = FALSE)
   }

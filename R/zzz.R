@@ -7,7 +7,7 @@ if (getRversion() >= "2.15.1") {
     "trend", "remainder", "sub.labels", "weights", "observations", "decomposed",
     "trend_test", "trend_and_remainder", "date_start", "date_end", "p_value",
     "slope", "slope_lower", "slope_upper", "significant", "intercept", 
-    "intercept_lower", "intercept_upper", "date_centre"
+    "intercept_lower", "intercept_upper", "date_centre", "value", "deseason"
   )
   
   # Squash the notes

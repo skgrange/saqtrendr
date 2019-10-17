@@ -4,14 +4,17 @@
 \alias{saq_trend_test}
 \title{Function to conduct a robust trend test.}
 \usage{
-saq_trend_test(df, by = as.character(), window = 35,
-  na_preserve = TRUE, alpha = 0.05, auto_correlation = FALSE,
-  progress = FALSE)
+saq_trend_test(df, by = as.character(), decompose = TRUE,
+  window = 35, na_preserve = TRUE, alpha = 0.05,
+  auto_correlation = FALSE, progress = FALSE)
 }
 \arguments{
 \item{df}{Input data frame containing a time series.}
 
 \item{by}{Which variables should be used as grouping variables?}
+
+\item{decompose}{Should the time series be decomposed before the trend test? 
+If this is \code{FALSE}, names in your inputs will be changed.}
 
 \item{window}{Span (in lags) of the loess window for seasonal extraction. 
 This should be an odd number.}

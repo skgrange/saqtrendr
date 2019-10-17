@@ -11,8 +11,8 @@ data_frame_to_time_series(df, variable = "value", period = "month")
 
 \item{variable}{Variable in \code{df} to create a time series object with.}
 
-\item{period}{Period/interval to make time series. Currently, only month is
-supported.}
+\item{period}{Period/interval to make time series. Currently, only 
+\code{"month"} and \code{"day"} are supported.}
 }
 \value{
 A \code{ts} object.

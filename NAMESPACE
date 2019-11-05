@@ -2,6 +2,7 @@
 
 export("%>%")
 export(data_frame_to_time_series)
+export(decompose_with_kz_filters)
 export(decompose_with_stlplus)
 export(saq_trend_plot)
 export(saq_trend_test)

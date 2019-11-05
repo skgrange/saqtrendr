@@ -15,6 +15,12 @@ This should be an odd number.}
 \item{na_preserve}{Should observations which were missing with the values
 also be propagated into the the deseasonalised components?}
 }
+\value{
+Tibble.
+}
 \description{
 Function to classically decompose a time series with \code{stlplus}.
+}
+\author{
+Stuart K. Grange
 }

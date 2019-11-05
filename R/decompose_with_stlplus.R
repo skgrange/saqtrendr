@@ -8,6 +8,10 @@
 #' @param na_preserve Should observations which were missing with the values
 #' also be propagated into the the deseasonalised components? 
 #' 
+#' @return Tibble. 
+#' 
+#' @author Stuart K. Grange
+#' 
 #' @export
 decompose_with_stlplus <- function(df, window = 35, na_preserve = TRUE) {
   

@@ -48,8 +48,8 @@ apply_kza_filter <- function(df, window = 365, k = 3, impute_tails = FALSE) {
   df_kz <- tibble(
     date = df$date,
     value = df$value,
-    value_filtered = list_signal$kz,
-    value_signal = list_signal$kza
+    value_kz = list_signal$kz,
+    value_kza = list_signal$kza
   )
   
   return(df_kz)

@@ -4,9 +4,16 @@
 \alias{saq_trend_test}
 \title{Function to conduct a robust trend test.}
 \usage{
-saq_trend_test(df, by = as.character(), decompose = TRUE,
-  window = 35, na_preserve = TRUE, alpha = 0.05,
-  auto_correlation = FALSE, progress = FALSE)
+saq_trend_test(
+  df,
+  by = as.character(),
+  decompose = TRUE,
+  window = 35,
+  na_preserve = TRUE,
+  alpha = 0.05,
+  auto_correlation = FALSE,
+  progress = FALSE
+)
 }
 \arguments{
 \item{df}{Input data frame containing a time series.}

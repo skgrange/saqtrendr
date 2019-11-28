@@ -4,8 +4,17 @@
 \alias{saq_trend_plot}
 \title{Function to build a trend plot from the output of \code{\link{saq_trend_test}}.}
 \usage{
-saq_trend_plot(df, df_tests, label = TRUE, round = 3, y_location = 1,
-  facet_variable = NA, scales = "fixed", colour = "#FCA50A")
+saq_trend_plot(
+  df,
+  df_tests,
+  label = TRUE,
+  round = 3,
+  y_location = 1,
+  facet_variable = NA,
+  scales = "fixed",
+  colour = "#FCA50A",
+  x_angle = NA
+)
 }
 \arguments{
 \item{df}{Input data frame, generally containing deseasonalised observations
@@ -29,6 +38,9 @@ be used for faceting?}
 free or fixed?}
 
 \item{colour}{Colour of the plot's point and lines.}
+
+\item{x_angle}{Angle of the x-tick (date) labels. If overlapping labels are
+encountered, setting \code{x_angle} to \code{45} may help.}
 }
 \value{
 \strong{ggplot2} plot.

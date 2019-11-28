@@ -8,7 +8,7 @@ if (getRversion() >= "2.15.1") {
     "trend_test", "trend_and_remainder", "date_start", "date_end", "p_value",
     "slope", "slope_lower", "slope_upper", "significant", "intercept", 
     "intercept_lower", "intercept_upper", "date_centre", "value", "deseason",
-    "baseline"
+    "baseline", "n"
   )
   
   # Squash the notes

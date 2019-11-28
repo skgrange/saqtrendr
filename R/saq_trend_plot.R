@@ -20,6 +20,9 @@
 #' @param scales If \code{facet_variable} is \code{TRUE}, should the axes be 
 #' free or fixed? 
 #' 
+#' @param x_angle Angle of the x-tick (date) labels. If overlapping labels are
+#' encountered, setting \code{x_angle} to \code{45} may help. 
+#' 
 #' @param colour Colour of the plot's point and lines.
 #' 
 #' @author Stuart K. Grange
@@ -29,7 +32,7 @@
 #' @export
 saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3, 
                            y_location = 1, facet_variable = NA, scales = "fixed",
-                           colour = "#FCA50A") {
+                           colour = "#FCA50A", x_angle = NA) {
   
   # If a list is passed
   if (class(df) == "list" && 
@@ -71,7 +74,8 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
              ", ",
              round(slope_upper, round),
              "] ", 
-             significant
+             significant,
+             " n = ", n
            ),
            label = stringr::str_trim(label))
   
@@ -126,6 +130,11 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
   # Facet
   if (!is.na(facet_variable)) {
     plot <- plot + facet_wrap(facet_variable, scales = scales)
+  }
+  
+  # x-axis labels
+  if (!is.na(x_angle)) {
+    plot <- plot + theme(axis.text.x = element_text(angle = x_angle, hjust = 1))
   }
   
   # Print plot in function

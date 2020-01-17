@@ -128,7 +128,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
   }
   
   # Facet
-  if (!is.na(facet_variable)) {
+  if (!is.na(facet_variable[1])) {
     plot <- plot + facet_wrap(facet_variable, scales = scales)
   }
   

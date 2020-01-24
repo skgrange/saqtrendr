@@ -1,6 +1,7 @@
-#' Function to classically decompose a time series with \code{stlplus}. 
+#' Function to classically decompose a monthly time series with \code{stlplus}. 
 #' 
-#' @param df Data frame containing time series observations. 
+#' @param df Data frame containing time series observations. The resolution 
+#' must be monthly and this will be tested for. 
 #' 
 #' @param window Span (in lags) of the loess window for seasonal extraction. 
 #' This should be an odd number. 
@@ -15,7 +16,7 @@
 #' @export
 decompose_with_stlplus <- function(df, window = 35, na_preserve = TRUE) {
   
-  # Checks needed: missing values, monthly resolution
+  # Checks needed: missing values
   
   if (!"date" %in% names(df)) {
     stop("`date` must be present in data frame.", call. = FALSE)
@@ -23,6 +24,10 @@ decompose_with_stlplus <- function(df, window = 35, na_preserve = TRUE) {
   
   if (!lubridate::is.POSIXct(df$date)) {
     stop("`date` must be a parsed date (POSIXct).", call. = FALSE) 
+  }
+  
+  if (!threadr::detect_date_interval(df$date, text_return = TRUE) == "month") {
+    stop("Time series must be at monthly resolution.", call. = FALSE)
   }
   
   if (!"value" %in% names(df)) {

@@ -23,7 +23,8 @@
 #' @param x_angle Angle of the x-tick (date) labels. If overlapping labels are
 #' encountered, setting \code{x_angle} to \code{45} may help. 
 #' 
-#' @param colour Colour of the plot's point and lines.
+#' @param colour Either a colour of the plot's point and lines, or a variable in
+#' \code{df} which the points' and lines' colours will be mapped to. 
 #' 
 #' @author Stuart K. Grange
 #' 
@@ -39,7 +40,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
       missing(df_tests) && 
       names(df) %in% c("decomposed", "trend_tests")) {
     
-    # The order matters here 
+    # The order matters here due to df being overwritten
     df_tests <- df$trend_tests
     df <- df$decomposed
     
@@ -85,10 +86,28 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
     df_labels <- mutate(df_labels, value_label_y = !!value_label_y)
   }
   
-  # Build the plot
-  plot <- ggplot(data = df, aes(date, trend_and_remainder)) + 
-    geom_line(colour = colour, na.rm = TRUE) +
-    geom_point(size = 1.5, pch = 1, colour = colour, na.rm = TRUE) + 
+  # Build the basic components of plot, some repitition here...
+  if (colour %in% names(df)) {
+    
+    # Requires the use of aes_string
+    plot <- ggplot(
+      data = df, 
+      ggplot2::aes_string("date", "trend_and_remainder", colour = colour)
+    ) + 
+      geom_line() + 
+      geom_point(size = 1.5, pch = 1, na.rm = TRUE)
+    
+  } else {
+    
+    # A bit simpler
+    plot <- ggplot(data = df, aes(date, trend_and_remainder)) +
+      geom_line(colour = colour, na.rm = TRUE) +
+      geom_point(size = 1.5, pch = 1, colour = colour, na.rm = TRUE)
+    
+  }
+  
+  # Add the extras
+  plot <- plot + 
     geom_abline(
       data = df_tests,
       aes(slope = slope / threadr::seconds_in_a_year(), intercept = intercept)
@@ -117,6 +136,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
   
   if (label) {
     
+    # Could use geom_label too? 
     plot <- plot +
       geom_text(
         data = df_labels,

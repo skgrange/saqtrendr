@@ -37,7 +37,8 @@ be used for faceting?}
 \item{scales}{If \code{facet_variable} is \code{TRUE}, should the axes be 
 free or fixed?}
 
-\item{colour}{Colour of the plot's point and lines.}
+\item{colour}{Either a colour of the plot's point and lines, or a variable in
+\code{df} which the points' and lines' colours will be mapped to.}
 
 \item{x_angle}{Angle of the x-tick (date) labels. If overlapping labels are
 encountered, setting \code{x_angle} to \code{45} may help.}

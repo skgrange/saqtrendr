@@ -12,7 +12,7 @@
 #' 
 #' @return Tibble. 
 #' 
-#' @author Sturat K. Grange
+#' @author Stuart K. Grange
 #' 
 #' @export
 apply_kza_filter <- function(df, window = 365, k = 3, impute_tails = FALSE) {

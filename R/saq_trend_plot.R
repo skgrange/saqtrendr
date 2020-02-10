@@ -26,6 +26,8 @@
 #' @param colour Either a colour of the plot's point and lines, or a variable in
 #' \code{df} which the points' and lines' colours will be mapped to. 
 #' 
+#' @param parse_facet_label Should the facet names be parsed as an expression? 
+#' 
 #' @author Stuart K. Grange
 #' 
 #' @return \strong{ggplot2} plot.
@@ -33,7 +35,8 @@
 #' @export
 saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3, 
                            y_location = 1, facet_variable = NA, scales = "fixed",
-                           colour = "#FCA50A", x_angle = NA) {
+                           colour = "#FCA50A", x_angle = NA, 
+                           parse_facet_label = FALSE) {
   
   # If a list is passed
   if (class(df) == "list" && 
@@ -76,7 +79,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
              round(slope_upper, round),
              "] ", 
              significant,
-             " n = ", n
+             " (n = ", n, ")"
            ),
            label = stringr::str_trim(label))
   
@@ -127,12 +130,11 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
         intercept = intercept_upper
       ),
       linetype = "dashed"
-    ) +
-    # coord_cartesian(ylim = y_lim) +
+    ) + 
     ylim(0, NA) + 
     threadr::theme_less_minimal() + 
     xlab("Date") +
-    ylab("Deseasonalised trend")
+    ylab("Deseasonalised monthly means")
   
   if (label) {
     
@@ -143,13 +145,30 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
         aes(label = label, x = date_centre, y = value_label_y),
         size = 3,
         colour = "black"
+      ) +
+      labs(
+        caption = expression(
+          Slope ~ '[lower,' ~ 'upper]' ~ 95 ~ '%' ~ 'in' ~ units ~
+            year ^ {-1} ~ '(count) and * indicates a sig. trend' 
+        )
       )
     
   }
   
   # Facet
   if (!is.na(facet_variable[1])) {
-    plot <- plot + facet_wrap(facet_variable, scales = scales)
+    
+    # For expressions
+    if (parse_facet_label) {
+      facet_label <- ggplot2::label_parsed
+    } else {
+      facet_label <- "label_value"
+    }
+    
+    plot <- plot + 
+      facet_wrap(facet_variable, scales = scales, labeller = facet_label) +
+      theme(strip.text.x = element_text(margin = margin(b = 1, t = 1)))
+      
   }
   
   # x-axis labels

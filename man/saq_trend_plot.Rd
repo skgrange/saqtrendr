@@ -13,7 +13,8 @@ saq_trend_plot(
   facet_variable = NA,
   scales = "fixed",
   colour = "#FCA50A",
-  x_angle = NA
+  x_angle = NA,
+  parse_facet_label = FALSE
 )
 }
 \arguments{
@@ -42,6 +43,8 @@ free or fixed?}
 
 \item{x_angle}{Angle of the x-tick (date) labels. If overlapping labels are
 encountered, setting \code{x_angle} to \code{45} may help.}
+
+\item{parse_facet_label}{Should the facet names be parsed as an expression?}
 }
 \value{
 \strong{ggplot2} plot.

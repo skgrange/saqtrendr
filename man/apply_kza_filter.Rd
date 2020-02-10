@@ -25,5 +25,5 @@ Function to apply the adaptive Kolmogorov-Zurbenko (KZA) filter to a time
 series, usually used for discontinuity identification.
 }
 \author{
-Sturat K. Grange
+Stuart K. Grange
 }

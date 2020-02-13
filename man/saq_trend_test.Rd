@@ -2,7 +2,7 @@
 % Please edit documentation in R/saq_trend_test.R
 \name{saq_trend_test}
 \alias{saq_trend_test}
-\title{Function to conduct a robust trend test.}
+\title{Function to conduct a robust trend test using the Theil-Sen estimator.}
 \usage{
 saq_trend_test(
   df,
@@ -12,6 +12,7 @@ saq_trend_test(
   na_preserve = TRUE,
   alpha = 0.05,
   auto_correlation = FALSE,
+  period = "month",
   progress = FALSE
 )
 }
@@ -21,7 +22,7 @@ saq_trend_test(
 \item{by}{Which variables should be used as grouping variables?}
 
 \item{decompose}{Should the time series be decomposed before the trend test? 
-If this is \code{FALSE}, names in your inputs will be changed.}
+If this is \code{FALSE}, names in your input will be changed.}
 
 \item{window}{Span (in lags) of the loess window for seasonal extraction. 
 This should be an odd number.}
@@ -34,6 +35,9 @@ confidence intervals.}
 
 \item{auto_correlation}{Should auto correlation be considered in the 
 estimates?}
+
+\item{period}{Period of input time series. Default is \code{"month"} but can
+also be \code{"year"}.}
 
 \item{progress}{Should a progress bar be displayed for the trend test 
 calculations?}

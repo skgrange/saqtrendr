@@ -1,4 +1,4 @@
-#' Function to conduct a robust trend test. 
+#' Function to conduct a robust trend test using the Theil-Sen estimator.
 #' 
 #' \code{saq_trend_test} can conduct the trend tests in parallel if a 
 #' \strong{futures} backend has been registered. 
@@ -8,7 +8,7 @@
 #' @param by Which variables should be used as grouping variables? 
 #' 
 #' @param decompose Should the time series be decomposed before the trend test? 
-#' If this is \code{FALSE}, names in your inputs will be changed. 
+#' If this is \code{FALSE}, names in your input will be changed. 
 #' 
 #' @param window Span (in lags) of the loess window for seasonal extraction. 
 #' This should be an odd number.
@@ -22,6 +22,9 @@
 #' @param auto_correlation Should auto correlation be considered in the 
 #' estimates?
 #' 
+#' @param period Period of input time series. Default is \code{"month"} but can
+#' also be \code{"year"}. 
+#' 
 #' @param progress Should a progress bar be displayed for the trend test 
 #' calculations? 
 #' 
@@ -32,12 +35,17 @@
 #' @export
 saq_trend_test <- function(df, by = as.character(), decompose = TRUE, window = 35, 
                            na_preserve = TRUE, alpha = 0.05, 
-                           auto_correlation = FALSE, progress = FALSE) {
+                           auto_correlation = FALSE, period = "month", 
+                           progress = FALSE) {
   
   # Could also return the nested tibble? 
   
   # Check value
   stopifnot("value" %in% names(df) && is.numeric(df$value))
+  
+  # Check period and switch decompose argument if needed
+  stopifnot(period %in% c("month", "year"))
+  decompose <- if_else(period == "year", FALSE, decompose)
   
   # Do the transformations and calculations in a nested tibble
   df_nest <- df %>% 
@@ -63,7 +71,8 @@ saq_trend_test <- function(df, by = as.character(), decompose = TRUE, window = 3
             variable = "trend_and_remainder",
             deseason = FALSE,
             alpha = alpha,
-            auto_correlation = auto_correlation
+            auto_correlation = auto_correlation,
+            period = period
           ),
           .progress = progress
         )

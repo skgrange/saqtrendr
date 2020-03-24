@@ -39,25 +39,55 @@ detect_anomalies_with_shesd <- function(df, max_fraction = 0.02,
     stop("`date` must be a parsed date (POSIXct).", call. = FALSE) 
   }
   
+  # date NA check
+  
   # Check value
   stopifnot("value" %in% names(df) && is.numeric(df$value))
   
-  # Do the detection
-  df_anomalies <- df %>% 
-    select(date, 
-           value) %>% 
-    AnomalyDetection::ad_ts(
-      max_anoms = max_fraction, 
-      direction = direction,
-      longterm = long_term,
-      only_last = only_last,
-      verbose = FALSE,
-      na.rm = FALSE
-    ) %>% 
-    rename(date = timestamp)
+  # Check number of observations
+  if (nrow(df) <= 2) {
+    warning("Too few observations for anomaly detection to be performed...", call. = FALSE)
+    return(df)
+  }
   
-  # Code for anomaly
-  df <- mutate(df, anomaly = date %in% df_anomalies$date)
+  # Do the detection
+  df_anomalies <- anomaly_detection_worker(
+    df,
+    max_fraction = max_fraction,
+    direction = direction,
+    long_term = long_term,
+    only_last = only_last
+  )
+  
+  # If zero row return, try again with long term argument
+  if (nrow(df_anomalies) == 0 && !long_term) {
+    
+    warning(
+      "Anomaly detection failed, attempting to use `long_term` algorithm...",
+      call. = FALSE
+    )
+    
+    df_anomalies <- anomaly_detection_worker(
+        df,
+        max_fraction = max_fraction,
+        direction = direction,
+        long_term = TRUE,
+        only_last = only_last
+      )
+    
+  }
+  
+  # Failure of algorithm
+  if (nrow(df_anomalies) == 0) {
+    warning(
+      "Anomaly detection failed...",
+      call. = FALSE
+    )
+    return(df)
+  }
+
+  # Code for anomaly, timestamp variable name here
+  df <- mutate(df, anomaly = date %in% df_anomalies$timestamp)
   
   # Invalidate observations
   if (invalidate) {
@@ -65,5 +95,28 @@ detect_anomalies_with_shesd <- function(df, max_fraction = 0.02,
   }
   
   return(df)
+  
+}
+
+
+anomaly_detection_worker <- function(df, max_fraction, direction, long_term,
+                                     only_last) {
+  
+  tryCatch({
+    df %>% 
+      select(date, 
+             value) %>% 
+      filter(!is.na(value)) %>% 
+      AnomalyDetection::ad_ts(
+        max_anoms = max_fraction, 
+        direction = direction,
+        longterm = long_term,
+        only_last = only_last,
+        verbose = FALSE,
+        na.rm = FALSE
+      )
+  }, error = function(e) {
+    tibble()
+  })
   
 }

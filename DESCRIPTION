@@ -1,7 +1,7 @@
 Package: saqtrendr
 Type: Package
 Title: Tools to Conduct Quick and Easy Trend Analysis
-Version: 0.1.000
+Version: 0.1.001
 Date: 2020-03-23
 Authors@R: person("Stuart K.", "Grange", email = "stuart.grange@york.ac.uk", 
     role = c("cre", "aut"), comment = c(ORCID = "0000-0003-4093-3596"))

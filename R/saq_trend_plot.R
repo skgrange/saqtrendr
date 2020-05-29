@@ -89,7 +89,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
     df_labels <- mutate(df_labels, value_label_y = !!value_label_y)
   }
   
-  # Build the basic components of plot, some repitition here...
+  # Build the basic components of plot, some repetition here...
   if (colour %in% names(df)) {
     
     # Requires the use of aes_string

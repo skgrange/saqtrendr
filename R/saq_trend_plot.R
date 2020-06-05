@@ -89,6 +89,13 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
     df_labels <- mutate(df_labels, value_label_y = !!value_label_y)
   }
   
+  # For y-axes labels
+  if (all(df_tests$decomposed)) {
+    label_y_axis <- "Deseasonalised monthly means"
+  } else {
+    label_y_axis <- "Monthly means"
+  }
+  
   # Build the basic components of plot, some repetition here...
   if (colour %in% names(df)) {
     
@@ -134,7 +141,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
     ylim(0, NA) + 
     threadr::theme_less_minimal() + 
     xlab("Date") +
-    ylab("Deseasonalised monthly means")
+    ylab(label_y_axis)
   
   if (label) {
     

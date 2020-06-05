@@ -183,9 +183,6 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
     plot <- plot + theme(axis.text.x = element_text(angle = x_angle, hjust = 1))
   }
   
-  # Print plot in function
-  print(plot)
-  
-  return(invisible(plot))
+  return(plot)
   
 }

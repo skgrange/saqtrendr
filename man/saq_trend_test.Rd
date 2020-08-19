@@ -40,7 +40,7 @@ estimates?}
 also be \code{"year"}.}
 
 \item{progress}{Should a progress bar be displayed for the trend test 
-calculations?}
+calculations? Currently this is not used.}
 }
 \value{
 Named list.

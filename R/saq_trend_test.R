@@ -26,7 +26,7 @@
 #' also be \code{"year"}. 
 #' 
 #' @param progress Should a progress bar be displayed for the trend test 
-#' calculations? 
+#' calculations? Currently this is not used. 
 #' 
 #' @author Stuart K. Grange
 #' 
@@ -73,8 +73,7 @@ saq_trend_test <- function(df, by = as.character(), decompose = TRUE, window = 3
             alpha = alpha,
             auto_correlation = auto_correlation,
             period = period
-          ),
-          .progress = progress
+          )
         )
       )
     
@@ -97,12 +96,11 @@ saq_trend_test <- function(df, by = as.character(), decompose = TRUE, window = 3
             deseason = FALSE,
             alpha = alpha,
             auto_correlation = auto_correlation
-          ),
-          .progress = progress
+          )
         )
       )
     
-    # Get pieces, a bad name here
+    # Get pieces, a bad name here, these data are not decomposed
     df_decomposed <- df_nest %>% 
       select(-trend_test) %>% 
       tidyr::unnest(observations) %>% 
@@ -119,7 +117,7 @@ saq_trend_test <- function(df, by = as.character(), decompose = TRUE, window = 3
   
   # Build list for return
   list_trends <- list(
-    decomposed = df_decomposed,
+    observations = df_decomposed,
     trend_tests = df_trend_tests
   )
   

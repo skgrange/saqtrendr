@@ -12,6 +12,7 @@ saq_trend_plot(
   y_location = 1,
   facet_variable = NA,
   scales = "fixed",
+  ylim = c(0, NA),
   colour = "#FCA50A",
   x_angle = NA,
   parse_facet_label = FALSE
@@ -37,6 +38,9 @@ be used for faceting?}
 
 \item{scales}{If \code{facet_variable} is \code{TRUE}, should the axes be 
 free or fixed?}
+
+\item{ylim}{A vector with the length of two for the y-axis limits. By default,
+the y-axis will start at zero.}
 
 \item{colour}{Either a colour of the plot's point and lines, or a variable in
 \code{df} which the points' and lines' colours will be mapped to.}

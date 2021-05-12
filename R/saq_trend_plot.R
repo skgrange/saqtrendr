@@ -20,6 +20,9 @@
 #' @param scales If \code{facet_variable} is \code{TRUE}, should the axes be 
 #' free or fixed? 
 #' 
+#' @param ylim A vector with the length of two for the y-axis limits. By default,
+#' the y-axis will start at zero. 
+#' 
 #' @param x_angle Angle of the x-tick (date) labels. If overlapping labels are
 #' encountered, setting \code{x_angle} to \code{45} may help. 
 #' 
@@ -35,27 +38,26 @@
 #' @export
 saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3, 
                            y_location = 1, facet_variable = NA, scales = "fixed",
-                           colour = "#FCA50A", x_angle = NA, 
+                           ylim = c(0, NA), colour = "#FCA50A", x_angle = NA, 
                            parse_facet_label = FALSE) {
   
   # If a list is passed
   if (class(df) == "list" && 
       missing(df_tests) && 
-      names(df) %in% c("decomposed", "trend_tests")) {
+      names(df) %in% c("observations", "trend_tests")) {
     
     # The order matters here due to df being overwritten
     df_tests <- df$trend_tests
-    df <- df$decomposed
+    df <- df$observations
     
   }
   
   if (stringr::str_detect(scales, "free") && !is.na(facet_variable[1])) {
     
-    # site_name_country
     df_value_label_y <- df %>% 
       dplyr::group_by_at(facet_variable) %>% 
-      summarise(value_label_y = max(trend_and_remainder, na.rm = TRUE)) %>% 
-      ungroup()
+      summarise(value_label_y = max(trend_and_remainder, na.rm = TRUE),
+                .groups = "drop")
     
   } else {
     
@@ -138,7 +140,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
       ),
       linetype = "dashed"
     ) + 
-    ylim(0, NA) + 
+    ylim(as.numeric(ylim)) + 
     threadr::theme_less_minimal() + 
     xlab("Date") +
     ylab(label_y_axis)

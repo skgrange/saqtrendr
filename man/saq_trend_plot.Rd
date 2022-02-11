@@ -14,7 +14,7 @@ saq_trend_plot(
   scales = "fixed",
   ylim = c(0, NA),
   colour = "#FCA50A",
-  x_angle = NA,
+  x_label_rotate = 0,
   parse_facet_label = FALSE
 )
 }
@@ -45,8 +45,8 @@ the y-axis will start at zero.}
 \item{colour}{Either a colour of the plot's point and lines, or a variable in
 \code{df} which the points' and lines' colours will be mapped to.}
 
-\item{x_angle}{Angle of the x-tick (date) labels. If overlapping labels are
-encountered, setting \code{x_angle} to \code{45} may help.}
+\item{x_label_rotate}{Angle of the x-tick (date) labels. If overlapping 
+labels are encountered, setting \code{x_angle} to \code{45} may help.}
 
 \item{parse_facet_label}{Should the facet names be parsed as an expression?}
 }

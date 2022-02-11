@@ -124,3 +124,44 @@ saq_trend_test <- function(df, by = as.character(), decompose = TRUE, window = 3
   return(list_trends)
   
 }
+
+
+# f <- function(df, decompose = TRUE, window = 35, na_preserve = TRUE, 
+#               alpha = 0.05, auto_correlation = FALSE, period = "month") {
+#   
+#   # Check value
+#   stopifnot("value" %in% names(df) && is.numeric(df$value))
+#   
+#   # Check period and switch decompose argument if needed
+#   stopifnot(period %in% c("month", "year"))
+#   decompose <- if_else(period == "year", FALSE, decompose)
+#   
+#   # Decompose time series with stlplus
+#   if (decompose) {
+#     df <- df %>% 
+#       decompose_with_stlplus(window = window, na_preserve = na_preserve)
+#   } else {
+#     df <- rename(df, trend_and_remainder = value)
+#   }
+#   
+#   # Do the test, the deseasonalisation algorithm has been applied
+#   df_tests <- df %>% 
+#     smonitor::theil_sen_trend_test(
+#       variable = "trend_and_remainder",
+#       deseason = FALSE,
+#       alpha = alpha,
+#       auto_correlation = auto_correlation,
+#       period = period
+#     ) %>% 
+#     select(-deseason)
+#   
+#   # Build list for return
+#   df_nest <- tibble(
+#     decompose = decompose,
+#     observations = list(df),
+#     trend_tests = list(df_tests)
+#   )
+#   
+#   return(df_nest)
+#   
+# }

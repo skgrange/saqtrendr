@@ -23,8 +23,8 @@
 #' @param ylim A vector with the length of two for the y-axis limits. By default,
 #' the y-axis will start at zero. 
 #' 
-#' @param x_angle Angle of the x-tick (date) labels. If overlapping labels are
-#' encountered, setting \code{x_angle} to \code{45} may help. 
+#' @param x_label_rotate Angle of the x-tick (date) labels. If overlapping 
+#' labels are encountered, setting \code{x_angle} to \code{45} may help. 
 #' 
 #' @param colour Either a colour of the plot's point and lines, or a variable in
 #' \code{df} which the points' and lines' colours will be mapped to. 
@@ -38,7 +38,7 @@
 #' @export
 saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3, 
                            y_location = 1, facet_variable = NA, scales = "fixed",
-                           ylim = c(0, NA), colour = "#FCA50A", x_angle = NA, 
+                           ylim = c(0, NA), colour = "#FCA50A", x_label_rotate = 0, 
                            parse_facet_label = FALSE) {
   
   # If a list is passed
@@ -53,37 +53,36 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
   }
   
   if (stringr::str_detect(scales, "free") && !is.na(facet_variable[1])) {
-    
     df_value_label_y <- df %>% 
-      dplyr::group_by_at(facet_variable) %>% 
+      dplyr::group_by(across(!!facet_variable)) %>% 
       summarise(value_label_y = max(trend_and_remainder, na.rm = TRUE),
                 .groups = "drop")
-    
   } else {
-    
     value_label_y <- df %>% 
       pull(trend_and_remainder) %>% 
       max(na.rm = TRUE) %>% 
       `*` (y_location)
-    
   }
   
+  # Build labels that will be printed on the plot
   df_labels <- df_tests %>% 
-    mutate(date_start = min(date_start),
-           date_end = max(date_end),
-           date_centre = threadr::date_centre(date_start, date_end),
-           significant = if_else(p_value <= 0.05, "*", ""),
-           label = stringr::str_c(
-             round(slope, round), 
-             " [",
-             round(slope_lower, round),
-             ", ",
-             round(slope_upper, round),
-             "] ", 
-             significant,
-             " (n = ", n, ")"
-           ),
-           label = stringr::str_trim(label))
+    mutate(
+      date_start = min(date_start),
+      date_end = max(date_end),
+      date_centre = threadr::date_centre(date_start, date_end),
+      significant = if_else(p_value <= 0.05, "*", ""),
+      label = stringr::str_c(
+        format(round(slope, round), nsmall = round),
+        " [",
+        format(round(slope_lower, round), nsmall = round),
+        ", ",
+        format(round(slope_upper, round), nsmall = round),
+        "] ", 
+        significant,
+        " (n = ", n, ")"
+      ),
+      label = stringr::str_trim(label)
+    )
   
   if (stringr::str_detect(scales, "free") && !is.na(facet_variable[1])) {
     df_labels <- left_join(df_labels, df_value_label_y, by = facet_variable)
@@ -92,7 +91,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
   }
   
   # For y-axes labels
-  if (all(df_tests$decomposed)) {
+  if (all(df_tests$deseason)) {
     label_y_axis <- "Deseasonalised monthly means"
   } else {
     label_y_axis <- "Monthly means"
@@ -146,7 +145,6 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
     ylab(label_y_axis)
   
   if (label) {
-    
     # Could use geom_label too? 
     plot <- plot +
       geom_text(
@@ -161,7 +159,6 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
             year ^ {-1} ~ '(count) and * indicates a sig. trend' 
         )
       )
-    
   }
   
   # Facet
@@ -176,13 +173,8 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
     
     plot <- plot + 
       facet_wrap(facet_variable, scales = scales, labeller = facet_label) +
-      theme(strip.text.x = element_text(margin = margin(b = 1, t = 1)))
+      threadr::theme_less_minimal(x_label_rotate = x_label_rotate)
       
-  }
-  
-  # x-axis labels
-  if (!is.na(x_angle)) {
-    plot <- plot + theme(axis.text.x = element_text(angle = x_angle, hjust = 1))
   }
   
   return(plot)

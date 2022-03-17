@@ -14,6 +14,9 @@
 #' @param y_location If \code{label} is \code{TRUE}, where should the label be
 #' positioned? In a decimal of the maximum y value. 
 #' 
+#' @param include_n If \code{label} is \code{TRUE}, should the number of 
+#' observations be included in the label? 
+#' 
 #' @param facet_variable What variable in \code{df} and \code{df_tests} should
 #' be used for faceting? 
 #' 
@@ -37,9 +40,9 @@
 #' 
 #' @export
 saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3, 
-                           y_location = 1, facet_variable = NA, scales = "fixed",
-                           ylim = c(0, NA), colour = "#FCA50A", x_label_rotate = 0, 
-                           parse_facet_label = FALSE) {
+                           y_location = 1, include_n = TRUE, facet_variable = NA, 
+                           scales = "fixed", ylim = c(0, NA), colour = "#FCA50A",
+                           x_label_rotate = 0, parse_facet_label = FALSE) {
   
   # If a list is passed
   if (class(df) == "list" && 
@@ -75,7 +78,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
         format(round(slope, round), nsmall = round),
         " [",
         format(round(slope_lower, round), nsmall = round),
-        ", ",
+        ",",
         format(round(slope_upper, round), nsmall = round),
         "] ", 
         significant,
@@ -84,10 +87,38 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
       label = stringr::str_trim(label)
     )
   
+  # Drop n text if desired
+  if (include_n) {
+    # Simple case here
+    plot_caption <- expression(
+      Slope ~ '[lower,' ~ 'upper]' ~ 95 ~ '%' ~ 'in' ~ units ~
+        year ^ {-1} ~ '(count) and * indicates a sig. trend' 
+    )
+  } else {
+    
+    # Drop n from labels
+    df_labels <- df_labels %>% 
+      mutate(label = stringr::str_split_fixed(label, " \\(n", 2)[, 1],
+             label = stringr::str_trim(label))
+    
+    # Remove the count text
+    plot_caption <- expression(
+      Slope ~ '[lower,' ~ 'upper]' ~ 95 ~ '%' ~ 'in' ~ units ~
+        year ^ {-1} ~ 'and * indicates a sig. trend' 
+    )
+    
+  }
+  
   if (stringr::str_detect(scales, "free") && !is.na(facet_variable[1])) {
     df_labels <- left_join(df_labels, df_value_label_y, by = facet_variable)
   } else {
     df_labels <- mutate(df_labels, value_label_y = !!value_label_y)
+  }
+  
+  # A name switch, this needs to be done if the trend tests have been applied
+  # with smonitor
+  if ("deseason" %in% names(df_tests)) {
+    df_tests <- rename(df_tests, decomposed = deseason)
   }
   
   # For y-axes labels
@@ -153,12 +184,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
         size = 3,
         colour = "black"
       ) +
-      labs(
-        caption = expression(
-          Slope ~ '[lower,' ~ 'upper]' ~ 95 ~ '%' ~ 'in' ~ units ~
-            year ^ {-1} ~ '(count) and * indicates a sig. trend' 
-        )
-      )
+      labs(caption = plot_caption)
   }
   
   # Facet

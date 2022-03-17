@@ -10,6 +10,7 @@ saq_trend_plot(
   label = TRUE,
   round = 3,
   y_location = 1,
+  include_n = TRUE,
   facet_variable = NA,
   scales = "fixed",
   ylim = c(0, NA),
@@ -32,6 +33,9 @@ estimated be rounded too?}
 
 \item{y_location}{If \code{label} is \code{TRUE}, where should the label be
 positioned? In a decimal of the maximum y value.}
+
+\item{include_n}{If \code{label} is \code{TRUE}, should the number of 
+observations be included in the label?}
 
 \item{facet_variable}{What variable in \code{df} and \code{df_tests} should
 be used for faceting?}

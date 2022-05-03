@@ -14,7 +14,7 @@
 #' @export
 stl_to_data_frame <- function(stl, date_round = TRUE, na_preserve = FALSE) {
   
-  if (class(stl) == "stlplus") {
+  if (inherits(stl, "stlplus")) {
     
     # Get dates and transform into POSIXct
     date <- stl$time

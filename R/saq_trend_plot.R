@@ -47,7 +47,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
   # If a list is passed
   if (class(df) == "list" && 
       missing(df_tests) && 
-      names(df) %in% c("observations", "trend_tests")) {
+      all(names(df) %in% c("observations", "trend_tests"))) {
     
     # The order matters here due to df being overwritten
     df_tests <- df$trend_tests

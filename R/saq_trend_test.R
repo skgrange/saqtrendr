@@ -60,8 +60,8 @@ saq_trend_test <- function(df, by = as.character(), decompose = TRUE, window = 3
           observations, 
           ~decompose_with_stlplus(
             ., 
-            window = window, 
-            na_preserve = na_preserve
+            window = !!window, 
+            na_preserve = !!na_preserve
           )
         ),
         trend_test = furrr::future_map(
@@ -70,9 +70,9 @@ saq_trend_test <- function(df, by = as.character(), decompose = TRUE, window = 3
             ., 
             variable = "trend_and_remainder",
             deseason = FALSE,
-            alpha = alpha,
-            auto_correlation = auto_correlation,
-            period = period
+            alpha = !!alpha,
+            auto_correlation = !!auto_correlation,
+            period = !!period
           )
         )
       )
@@ -94,8 +94,8 @@ saq_trend_test <- function(df, by = as.character(), decompose = TRUE, window = 3
             ., 
             variable = "value",
             deseason = FALSE,
-            alpha = alpha,
-            auto_correlation = auto_correlation
+            alpha = !!alpha,
+            auto_correlation = !!auto_correlation
           )
         )
       )

@@ -45,7 +45,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
                            x_label_rotate = 0, parse_facet_label = FALSE) {
   
   # If a list is passed
-  if (class(df) == "list" && 
+  if (inherits(df, "list") && 
       missing(df_tests) && 
       all(names(df) %in% c("observations", "trend_tests"))) {
     

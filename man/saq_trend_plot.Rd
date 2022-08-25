@@ -16,7 +16,8 @@ saq_trend_plot(
   ylim = c(0, NA),
   colour = "#FCA50A",
   x_label_rotate = 0,
-  parse_facet_label = FALSE
+  parse_facet_label = FALSE,
+  point_size = 1.5
 )
 }
 \arguments{
@@ -53,6 +54,8 @@ the y-axis will start at zero.}
 labels are encountered, setting \code{x_angle} to \code{45} may help.}
 
 \item{parse_facet_label}{Should the facet names be parsed as an expression?}
+
+\item{point_size}{What size should the points be on the trend plot?}
 }
 \value{
 \strong{ggplot2} plot.

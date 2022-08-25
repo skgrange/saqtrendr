@@ -34,6 +34,8 @@
 #' 
 #' @param parse_facet_label Should the facet names be parsed as an expression? 
 #' 
+#' @param point_size What size should the points be on the trend plot? 
+#' 
 #' @author Stuart K. Grange
 #' 
 #' @return \strong{ggplot2} plot.
@@ -42,7 +44,8 @@
 saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3, 
                            y_location = 1, include_n = TRUE, facet_variable = NA, 
                            scales = "fixed", ylim = c(0, NA), colour = "#FCA50A",
-                           x_label_rotate = 0, parse_facet_label = FALSE) {
+                           x_label_rotate = 0, parse_facet_label = FALSE,
+                           point_size = 1.5) {
   
   # If a list is passed
   if (inherits(df, "list") && 
@@ -137,7 +140,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
       ggplot2::aes_string("date", "trend_and_remainder", colour = colour)
     ) + 
       geom_line() + 
-      geom_point(size = 1.5, pch = 1, na.rm = TRUE)
+      geom_point(size = point_size, pch = 1, na.rm = TRUE)
     
   } else {
     

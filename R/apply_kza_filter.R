@@ -19,16 +19,16 @@ apply_kza_filter <- function(df, window = 365, k = 3, impute_tails = FALSE) {
   
   # Check inputs
   if (!"date" %in% names(df)) {
-    stop("`date` must be present in input.", call. = FALSE)
+    cli::cli_abort("`date` must be present in input.")
   }
   
   # Check for daily time series
   if (threadr::detect_date_interval(df$date) != 86400) {
-    stop("Time series must be of daily resolution.", call. = FALSE)
+    cli::cli_abort("Time series must be of daily resolution.")
   }
   
   if (!"value" %in% names(df)) {
-    stop("Variable to be decomposed must be named `value`.", call. = FALSE)
+    cli::cli_abort("Variable to be decomposed must be named `value`.")
   }
   
   # Apply low pass filter to the data

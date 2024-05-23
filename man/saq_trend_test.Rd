@@ -2,12 +2,24 @@
 % Please edit documentation in R/saq_trend_test.R
 \name{saq_trend_test}
 \alias{saq_trend_test}
+\alias{saq_trend_test_nested}
 \title{Function to conduct a robust trend test using the Theil-Sen estimator.}
 \usage{
 saq_trend_test(
   df,
   by = as.character(),
   decompose = TRUE,
+  window = 35,
+  na_preserve = TRUE,
+  alpha = 0.05,
+  auto_correlation = FALSE,
+  period = "month",
+  progress = FALSE
+)
+
+saq_trend_test_nested(
+  df_nest,
+  decompose = FALSE,
   window = 35,
   na_preserve = TRUE,
   alpha = 0.05,
@@ -28,7 +40,7 @@ If this is \code{FALSE}, names in your input will be changed.}
 This should be an odd number.}
 
 \item{na_preserve}{Should observations which were missing with the values 
-also be propagated into the the deseasonalised components?}
+also be propagated into the deseasonalised components?}
 
 \item{alpha}{Confidence interval of the slope, default is 0.05 for 95 % 
 confidence intervals.}
@@ -40,10 +52,13 @@ estimates?}
 also be \code{"year"}.}
 
 \item{progress}{Should a progress bar be displayed for the trend test 
-calculations? Currently this is not used.}
+calculations?}
+
+\item{df_nest}{Nested tibble including a nested observational variable named
+\code{observations}.}
 }
 \value{
-Named list.
+Named list or nested tibble.
 }
 \description{
 \code{saq_trend_test} can conduct the trend tests in parallel if a 

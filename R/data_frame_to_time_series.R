@@ -22,10 +22,10 @@ data_frame_to_time_series <- function(df, variable = "value", period = "month") 
   } else if (period == "day") {
     frequency <- 365L
   } else {
-    stop("`frequency` not supported.", call. = FALSE)
+    cli::cli_abort("`frequency` not supported.")
   }
   
-  # Create the time series iobject
+  # Create the time series object
   ts <- ts(
     data = pull(df, !!variable),
     start = c(lubridate::year(date_start), lubridate::month(date_start)),

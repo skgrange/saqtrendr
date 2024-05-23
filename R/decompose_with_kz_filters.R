@@ -1,6 +1,6 @@
 #' Function to decompose a time series with Kolmogorov-Zurbenko (K-Z) filters.
 #' 
-#' @param df Data frame containing time series observations. 
+#' @param df A tibble containing time series observations.
 #' 
 #' @return Tibble. 
 #' 
@@ -10,16 +10,16 @@
 decompose_with_kz_filters <- function(df) {
   
   if (!"date" %in% names(df)) {
-    stop("`date` must be present in data frame.", call. = FALSE)
+    cli::cli_abort("`date` must be present in input tibble.")
   }
   
   # Check for daily time series
-  if (threadr::detect_date_interval(df$date) != 86400) {
-    stop("Time series must be of daily resolution.", call. = FALSE)
+  if (threadr::detect_date_interval(df$date) != 86400L) {
+    cli::cli_abort("Time series must be of daily resolution.")
   }
   
   if (!"value" %in% names(df)) {
-    stop("Variable to be decomposed must be named `value`.", call. = FALSE)
+    cli::cli_abort("Variable to be decomposed must be named `value`.")
   }
   
   # To time series object for kza

@@ -7,7 +7,7 @@
 decompose_with_kz_filters(df)
 }
 \arguments{
-\item{df}{Data frame containing time series observations.}
+\item{df}{A tibble containing time series observations.}
 }
 \value{
 Tibble.

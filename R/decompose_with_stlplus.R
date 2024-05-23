@@ -16,38 +16,34 @@
 #' @export
 decompose_with_stlplus <- function(df, window = 35, na_preserve = TRUE) {
   
-  # Checks needed: missing values
-  
   if (!"date" %in% names(df)) {
-    stop("`date` must be present in data frame.", call. = FALSE)
+    cli::cli_abort("`date` must be present in input.")
   }
   
   if (!lubridate::is.POSIXct(df$date)) {
-    stop("`date` must be a parsed date (POSIXct).", call. = FALSE) 
+    cli::cli_abort("`date` must be a parsed date (POSIXct).")
   }
   
   if (!threadr::detect_date_interval(df$date, text_return = TRUE) == "month") {
-    stop("Time series must be at monthly resolution.", call. = FALSE)
+    cli::cli_abort("Time series must be at monthly resolution.")
   }
   
   if (!"value" %in% names(df)) {
-    stop("Variable to be decomposed must be named `value`.", call. = FALSE)
+    cli::cli_abort("Variable to be decomposed must be named `value`.")
   }
   
   if (nrow(df) <= 3) {
-    warning("Too few observations to decompose...", call. = FALSE)
+    cli::cli_warn("Too few observations to decompose...")
     return(tibble())
   } else {
     
     df <- tryCatch({
-      
       df %>% 
         data_frame_to_time_series() %>% 
         stlplus::stlplus(s.window = window, s.degree = 0, robust = TRUE) %>% 
-        stl_to_data_frame(na_preserve = na_preserve) 
-      
+        stl_to_data_frame(na_preserve = na_preserve)
     }, error = function(e) {
-      warning("Decomposition failed...", call. = FALSE)
+      cli::cli_warn("Decomposition failed...")
       tibble()
     })
     

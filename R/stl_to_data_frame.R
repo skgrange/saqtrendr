@@ -27,8 +27,7 @@ stl_to_data_frame <- function(stl, date_round = TRUE, na_preserve = FALSE) {
       mutate(date = !!date,
              trend_and_remainder = trend + remainder) %>% 
       as_tibble() %>% 
-      select(date, 
-             everything()) %>% 
+      relocate(date) %>% 
       select(-sub.labels,
              -weights)
     
@@ -37,7 +36,7 @@ stl_to_data_frame <- function(stl, date_round = TRUE, na_preserve = FALSE) {
     }
     
   } else {
-    stop("Input not recognised.", call. = FALSE)
+    cli::cli_abort("Input not recognised.")
   }
   
   return(df)

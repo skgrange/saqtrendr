@@ -20,15 +20,15 @@ forecast_time_series <- function(df, method = c("arima", "exponential"), n = 10,
                                  ci = 80) {
   
   if (!"date" %in% names(df)) {
-    stop("`date` must be present in data frame.", call. = FALSE)
+    cli::cli_abort("`date` must be present in input tibble.")
   }
   
   if (!lubridate::is.POSIXct(df$date)) {
-    stop("`date` must be a parsed date (POSIXct).", call. = FALSE) 
+    cli::cli_abort("`date` must be a parsed date (POSIXct).") 
   }
   
   if (!"value" %in% names(df)) {
-    stop("Variable to be decomposed must be named `value`.", call. = FALSE)
+    cli::cli_abort("Variable to be decomposed must be named `value`.")
   }
   
   stopifnot(length(ci) == 1)

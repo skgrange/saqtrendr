@@ -3,6 +3,7 @@
 \name{saq_trend_test}
 \alias{saq_trend_test}
 \alias{saq_trend_test_nested}
+\alias{saq_trend_test_nested_worker}
 \title{Function to conduct a robust trend test using the Theil-Sen estimator.}
 \usage{
 saq_trend_test(
@@ -26,6 +27,16 @@ saq_trend_test_nested(
   auto_correlation = FALSE,
   period = "month",
   progress = FALSE
+)
+
+saq_trend_test_nested_worker(
+  df,
+  decompose = FALSE,
+  window = 35,
+  na_preserve = TRUE,
+  alpha = 0.05,
+  auto_correlation = FALSE,
+  period = "month"
 )
 }
 \arguments{

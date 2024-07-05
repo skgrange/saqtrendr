@@ -58,6 +58,13 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
     
   }
   
+  # If a nested tibble is passed after using `saq_trend_test_nested`
+  if (inherits(df, "rowwise_df")) {
+    # The order matters here due to df being overwritten
+    df_tests <- dplyr::reframe(df, trend_tests)
+    df <- dplyr::reframe(df, trend_observations)
+  }
+  
   if (stringr::str_detect(scales, "free") && !is.na(facet_variable[1])) {
     df_value_label_y <- df %>% 
       dplyr::group_by(across(!!facet_variable)) %>% 

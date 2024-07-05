@@ -167,8 +167,12 @@ saq_trend_test_nested <- function(df_nest, decompose = FALSE, window = 35,
 }
 
 
-saq_trend_test_nested_worker <- function(df, decompose, window, na_preserve, 
-                                         alpha, auto_correlation, period) {
+#' @rdname saq_trend_test
+#' @export
+saq_trend_test_nested_worker <- function(df, decompose = FALSE, window = 35, 
+                                         na_preserve = TRUE, alpha = 0.05, 
+                                         auto_correlation = FALSE, 
+                                         period = "month") {
 
   # Check value
   stopifnot("value" %in% names(df) && is.numeric(df$value))
@@ -186,7 +190,7 @@ saq_trend_test_nested_worker <- function(df, decompose, window, na_preserve,
 
   # Do the test, the deseasonalisation algorithm has been applied above if
   # desired
-  df_tests <- df %>%
+  df_tests <- df %>% 
     smonitor::theil_sen_trend_test(
       variable = "trend_and_remainder",
       deseason = FALSE,

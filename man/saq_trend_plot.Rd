@@ -13,7 +13,7 @@ saq_trend_plot(
   include_n = TRUE,
   facet_variable = NA,
   scales = "fixed",
-  ylim = c(0, NA),
+  ylim = c(NA, NA),
   colour = "#FCA50A",
   x_label_rotate = 0,
   parse_facet_label = FALSE,

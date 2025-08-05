@@ -43,7 +43,7 @@
 #' @export
 saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3, 
                            y_location = 1, include_n = TRUE, facet_variable = NA, 
-                           scales = "fixed", ylim = c(0, NA), colour = "#FCA50A",
+                           scales = "fixed", ylim = c(NA, NA), colour = "#FCA50A",
                            x_label_rotate = 0, parse_facet_label = FALSE,
                            point_size = 1.5) {
   

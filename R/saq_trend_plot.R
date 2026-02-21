@@ -138,21 +138,29 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
     label_y_axis <- "Monthly means"
   }
   
-  # Build the basic components of plot, some repetition here...
+  # Build the basic components of plot
   if (colour %in% names(df)) {
     
-    # Requires the use of aes_string
-    plot <- ggplot(
-      data = df, 
-      ggplot2::aes_string("date", "trend_and_remainder", colour = colour)
-    ) + 
+    # Work around tidy evaluation for ggplot
+    variable_date_for_plot <- ggplot2::sym("date")
+    variable_value_for_plot <- ggplot2::sym("trend_and_remainder")
+    
+    # Build the main components of the plot
+    plot <- df %>% 
+      ggplot(
+        aes(
+          !!variable_date_for_plot, !!variable_value_for_plot, colour = colour
+        )
+      ) + 
       geom_line() + 
       geom_point(size = point_size, pch = 1, na.rm = TRUE)
+    
     
   } else {
     
     # A bit simpler
-    plot <- ggplot(data = df, aes(date, trend_and_remainder)) +
+    plot <- df %>% 
+      ggplot(aes(date, trend_and_remainder)) +
       geom_line(colour = colour, na.rm = TRUE) +
       geom_point(size = 1.5, pch = 1, colour = colour, na.rm = TRUE)
     

@@ -144,17 +144,19 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
     # Work around tidy evaluation for ggplot
     variable_date_for_plot <- ggplot2::sym("date")
     variable_value_for_plot <- ggplot2::sym("trend_and_remainder")
+    colour_for_plot <- ggplot2::sym(colour)
     
     # Build the main components of the plot
     plot <- df %>% 
       ggplot(
         aes(
-          !!variable_date_for_plot, !!variable_value_for_plot, colour = colour
+          !!variable_date_for_plot, 
+          !!variable_value_for_plot, 
+          colour = !!colour_for_plot
         )
       ) + 
       geom_line() + 
       geom_point(size = point_size, pch = 1, na.rm = TRUE)
-    
     
   } else {
     

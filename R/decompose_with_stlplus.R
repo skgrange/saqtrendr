@@ -38,10 +38,13 @@ decompose_with_stlplus <- function(df, window = 35, na_preserve = TRUE) {
   } else {
     
     df <- tryCatch({
-      df %>% 
-        data_frame_to_time_series() %>% 
-        stlplus::stlplus(s.window = window, s.degree = 0, robust = TRUE) %>% 
-        stl_to_data_frame(na_preserve = na_preserve)
+      # Warning suppression is for when there are missing values, rather common
+      suppressWarnings(
+        df %>% 
+          data_frame_to_time_series() %>% 
+          stlplus::stlplus(s.window = window, s.degree = 0, robust = TRUE) %>% 
+          stl_to_data_frame(na_preserve = na_preserve) 
+      )
     }, error = function(e) {
       cli::cli_warn("Decomposition failed...")
       tibble()

@@ -32,7 +32,9 @@ stl_to_data_frame <- function(stl, date_round = TRUE, na_preserve = FALSE) {
              -weights)
     
     if (na_preserve) {
-      df <- dplyr::mutate_at(df, dplyr::vars(-1:-2), ~if_else(is.na(raw), NA_real_, .))
+      df <- dplyr::mutate(
+        df, across(-c(1, 2), ~if_else(is.na(raw), NA_real_, .))
+      )
     }
     
   } else {

@@ -82,7 +82,7 @@ saq_trend_plot <- function(df, df_tests, label = TRUE, round = 3,
     mutate(
       date_start = min(date_start),
       date_end = max(date_end),
-      date_centre = threadr::date_centre(date_start, date_end),
+      date_centre = mean(c(date_start, date_end)),
       significant = if_else(p_value <= 0.05, "*", ""),
       label = stringr::str_c(
         format(round(slope, round), nsmall = round),

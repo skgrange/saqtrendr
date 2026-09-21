@@ -11,42 +11,46 @@ export(saq_trend_test)
 export(saq_trend_test_nested)
 export(saq_trend_test_nested_worker)
 export(stl_to_data_frame)
-importFrom(dplyr,across)
-importFrom(dplyr,arrange)
-importFrom(dplyr,as_tibble)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,distinct)
-importFrom(dplyr,do)
-importFrom(dplyr,everything)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,if_else)
-importFrom(dplyr,inner_join)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,pull)
-importFrom(dplyr,relocate)
-importFrom(dplyr,rename)
-importFrom(dplyr,rowwise)
-importFrom(dplyr,select)
-importFrom(dplyr,slice)
-importFrom(dplyr,summarise)
-importFrom(dplyr,sym)
-importFrom(dplyr,tibble)
-importFrom(dplyr,ungroup)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,element_text)
-importFrom(ggplot2,facet_wrap)
-importFrom(ggplot2,geom_abline)
-importFrom(ggplot2,geom_line)
-importFrom(ggplot2,geom_point)
-importFrom(ggplot2,geom_text)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,labs)
-importFrom(ggplot2,margin)
-importFrom(ggplot2,theme)
-importFrom(ggplot2,xlab)
-importFrom(ggplot2,ylab)
-importFrom(ggplot2,ylim)
+importFrom(dplyr,
+  across,
+  arrange,
+  as_tibble,
+  bind_rows,
+  distinct,
+  do,
+  everything,
+  filter,
+  group_by,
+  if_else,
+  inner_join,
+  left_join,
+  mutate,
+  pull,
+  relocate,
+  rename,
+  rowwise,
+  select,
+  slice,
+  summarise,
+  sym,
+  tibble,
+  ungroup
+)
+importFrom(ggplot2,
+  aes,
+  element_text,
+  facet_wrap,
+  geom_abline,
+  geom_line,
+  geom_point,
+  geom_text,
+  ggplot,
+  labs,
+  margin,
+  theme,
+  xlab,
+  ylab,
+  ylim
+)
 importFrom(magrittr,"%>%")
 importFrom(utils,head)

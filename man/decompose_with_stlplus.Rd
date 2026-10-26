@@ -2,9 +2,18 @@
 % Please edit documentation in R/decompose_with_stlplus.R
 \name{decompose_with_stlplus}
 \alias{decompose_with_stlplus}
-\title{Function to classically decompose a monthly time series with \code{stlplus}.}
+\alias{decompose_with_stlplus_extra}
+\title{Functions to classically decompose a monthly time series with \code{stlplus}.}
 \usage{
 decompose_with_stlplus(df, window = 35, na_preserve = TRUE)
+
+decompose_with_stlplus_extra(
+  df,
+  window = 35,
+  na_preserve = FALSE,
+  span = 0.75,
+  as_long = FALSE
+)
 }
 \arguments{
 \item{df}{Data frame containing time series observations. The resolution 
@@ -15,12 +24,18 @@ This should be an odd number.}
 
 \item{na_preserve}{Should observations which were missing with the values
 also be propagated into the the deseasonalised components?}
+
+\item{span}{For the \code{trend_smooth} variable, what loess span should be
+used?}
+
+\item{as_long}{Should the return be in "long" format.}
 }
 \value{
 Tibble.
 }
 \description{
-Function to classically decompose a monthly time series with \code{stlplus}.
+The \code{decompose_with_stlplus_extra} variant has different defaults and
+also computes a \code{trend_smooth} variable.
 }
 \author{
 Stuart K. Grange

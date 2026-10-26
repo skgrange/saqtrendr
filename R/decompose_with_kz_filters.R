@@ -31,7 +31,7 @@ decompose_with_kz_filters <- function(df) {
     raw = df$value,
     baseline = as.numeric(kza::kz(ts, m = 15, k = 5)),
     trend = as.numeric(kza::kz(ts, m = 365, k = 3))
-  ) %>% 
+  ) |> 
     mutate(remainder = raw - baseline,
            trend_and_remainder = trend + remainder)
   

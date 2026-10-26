@@ -12,7 +12,7 @@ if (getRversion() >= "2.15.1") {
     "intercept_lower", "intercept_upper", "date_centre", "value", "deseason",
     "baseline", "n", "timestamp", "anomaly", "data", "fitted", "point_forecast", 
     "index", "value_fitted", "lower", "upper", "variable", "key", "trend_tests",
-    "trend_observations"
+    "trend_observations", "seasonal", "value_type"
   )
   
   # Squash the notes
